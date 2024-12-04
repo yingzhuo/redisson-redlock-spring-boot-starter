@@ -2,13 +2,13 @@
 
 ### 依赖 (maven):
 
-``xml
+```xml
 <dependency>
     <groupId>com.github.yingzhuo</groupId>
     <artifactId>redisson-redlock-spring-boot-starter</artifactId>
     <scope>0.1.0</scope>
 </dependency>
-``
+```
 
 ### 依赖 (gradle):
 
