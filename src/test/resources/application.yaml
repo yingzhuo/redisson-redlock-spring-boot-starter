@@ -1,0 +1,5 @@
+red-lock:
+  nodes:
+    - address: "localhost:6379"
+      username: ""
+      password: "133810"
