@@ -23,7 +23,7 @@ public class UseMultiLockAdvice implements ApplicationContextAware, Ordered {
 
     private RedissonRedLockFactory lockFactory = null;
     private ApplicationContext applicationContext = null;
-    private int order;
+    private int order = Ordered.LOWEST_PRECEDENCE;
 
     /**
      * 默认构造方法
@@ -98,11 +98,11 @@ public class UseMultiLockAdvice implements ApplicationContextAware, Ordered {
             }
         } else {
             // SpEL解析
-            var parser = new SpelExpressionParser();
-            var context = new StandardEvaluationContext();
+            var context = new StandardEvaluationContext(applicationContext);
             context.setVariable("args", args);
-            context.setVariable("beans", applicationContext);
-            return (String) parser.parseExpression(expression).getValue(context);
+
+            return (String) new SpelExpressionParser()
+                    .parseExpression(expression).getValue(context);
         }
     }
 

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.core.Ordered;
 import org.springframework.lang.Nullable;
 
 import java.io.Serializable;
@@ -96,7 +97,7 @@ public class RedLockProperties implements InitializingBean, Serializable {
         /**
          * 顺序
          */
-        private int order = 100;
+        private int order = Ordered.LOWEST_PRECEDENCE;
     }
 
 }
