@@ -15,9 +15,31 @@ import org.springframework.context.annotation.Bean;
 @ConditionalOnProperty(prefix = "red-lock", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class RedissonRedLockAutoConfiguration {
 
+    /**
+     * 注册锁的工厂
+     *
+     * @param properties 配置项
+     * @return 工厂实例
+     * @since 0.1.0
+     */
     @Bean
     public RedissonRedLockFactory redissonRedLockFactory(RedLockProperties properties) {
         return new RedissonRedLockFactoryImpl(properties);
+    }
+
+    /**
+     * 注册切面用于支持{@link UseMultiLock}
+     *
+     * @param lockFactory 锁的工厂
+     * @return 切面实例
+     * @see UseMultiLock
+     * @since 0.2.0
+     */
+    @Bean
+    public UseMultiLockAdvice useMultiLockAdvice(RedissonRedLockFactory lockFactory) {
+        var bean = new UseMultiLockAdvice();
+        bean.setLockFactory(lockFactory);
+        return bean;
     }
 
 }
