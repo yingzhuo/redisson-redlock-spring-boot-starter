@@ -8,9 +8,13 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.Ordered;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.SpelParserConfiguration;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.lang.Nullable;
+
+import java.lang.reflect.Method;
 
 /**
  * 切面用于支持 {@link UseMultiLock}
@@ -20,6 +24,16 @@ import org.springframework.lang.Nullable;
  */
 @Aspect
 public class UseMultiLockAdvice implements ApplicationContextAware, Ordered {
+
+    /**
+     * 表达式解析器
+     */
+    private static final ExpressionParser EXPRESSION_PARSER;
+
+    static {
+        var config = new SpelParserConfiguration(true, true);
+        EXPRESSION_PARSER = new SpelExpressionParser(config);
+    }
 
     private RedissonRedLockFactory lockFactory = null;
     private ApplicationContext applicationContext = null;
@@ -42,7 +56,7 @@ public class UseMultiLockAdvice implements ApplicationContextAware, Ordered {
             return joinPoint.proceed();
         }
 
-        var lockName = parseLockName(annotation, joinPoint.getArgs());
+        var lockName = parseLockName(annotation, joinPoint);
         var mLock = lockFactory.createLock(lockName);
 
         // 加锁
@@ -78,15 +92,10 @@ public class UseMultiLockAdvice implements ApplicationContextAware, Ordered {
 
     @Nullable
     private UseMultiLock getAnnotation(ProceedingJoinPoint joinPoint) {
-        var s = joinPoint.getSignature();
-        if (s instanceof MethodSignature ms) {
-            return ms.getMethod().getAnnotation(UseMultiLock.class);
-        } else {
-            return null;
-        }
+        return getMethod(joinPoint).getAnnotation(UseMultiLock.class);
     }
 
-    private String parseLockName(UseMultiLock annotation, Object[] args) {
+    private String parseLockName(UseMultiLock annotation, ProceedingJoinPoint joinPoint) {
         var expression = annotation.value();
 
         if (!annotation.usingSpEL()) {
@@ -99,10 +108,20 @@ public class UseMultiLockAdvice implements ApplicationContextAware, Ordered {
         } else {
             // SpEL解析
             var context = new StandardEvaluationContext(applicationContext);
-            context.setVariable("args", args);
+            context.setVariable("args", joinPoint.getArgs());
+            context.setVariable("method", getMethod(joinPoint).getName());
 
-            return (String) new SpelExpressionParser()
+            return (String) EXPRESSION_PARSER
                     .parseExpression(expression).getValue(context);
+        }
+    }
+
+    private Method getMethod(ProceedingJoinPoint joinPoint) {
+        var s = joinPoint.getSignature();
+        if (s instanceof MethodSignature ms) {
+            return ms.getMethod();
+        } else {
+            throw new AssertionError();
         }
     }
 
