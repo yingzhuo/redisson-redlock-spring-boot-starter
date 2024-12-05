@@ -1,6 +1,5 @@
 package com.github.yingzhuo.springboot.redlock;
 
-import com.github.yingzhuo.springboot.redlock.config.RedLockProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -36,6 +35,7 @@ public class RedissonRedLockAutoConfiguration {
      * @since 0.2.0
      */
     @Bean
+    @ConditionalOnProperty(prefix = "red-lock", name = "register-aop-aspect-advice", havingValue = "true", matchIfMissing = true)
     public UseMultiLockAdvice useMultiLockAdvice(RedissonRedLockFactory lockFactory) {
         var bean = new UseMultiLockAdvice();
         bean.setLockFactory(lockFactory);

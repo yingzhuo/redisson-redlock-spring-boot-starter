@@ -1,15 +1,13 @@
 package com.github.yingzhuo.springboot.redlock;
 
-import com.github.yingzhuo.springboot.redlock.config.Node;
-import com.github.yingzhuo.springboot.redlock.config.RedLockProperties;
 import org.redisson.Redisson;
 import org.redisson.RedissonMultiLock;
-import org.redisson.RedissonRedLock;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +23,8 @@ public class RedissonRedLockFactoryImpl implements RedissonRedLockFactory, Initi
 
     private static final String NODE_ADDRESS_PREFIX = "redis://";
 
-    private final List<Node> nodeConfigs;
+    private final int size;
+    private final List<RedLockProperties.Node> nodeConfigs;
     private final List<RedissonClient> clients;
 
     /**
@@ -34,6 +33,7 @@ public class RedissonRedLockFactoryImpl implements RedissonRedLockFactory, Initi
      * @param properties 配置项
      */
     public RedissonRedLockFactoryImpl(RedLockProperties properties) {
+        this.size = properties.getNodes().size();
         this.nodeConfigs = properties.getNodes();
         this.clients = new ArrayList<>(properties.getNodes().size());
     }
@@ -66,7 +66,13 @@ public class RedissonRedLockFactoryImpl implements RedissonRedLockFactory, Initi
      * {@inheritDoc}
      */
     @Override
-    public RedissonMultiLock createMultiLock(String lockName) {
+    public RLock createLock(String lockName) {
+        Assert.hasText("lockName", "lockName is required");
+
+        if (size == 1) {
+            return clients.get(0).getLock(lockName);
+        }
+
         var subLocks = new RLock[clients.size()];
         for (int i = 0; i < clients.size(); i++) {
             var client = clients.get(i);
@@ -75,21 +81,7 @@ public class RedissonRedLockFactoryImpl implements RedissonRedLockFactory, Initi
         return new RedissonMultiLock(subLocks);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @Deprecated
-    public RedissonRedLock createRedLock(String lockName) {
-        var subLocks = new RLock[clients.size()];
-        for (int i = 0; i < clients.size(); i++) {
-            var client = clients.get(i);
-            subLocks[i] = client.getLock(lockName);
-        }
-        return new RedissonRedLock(subLocks);
-    }
-
-    private String getAddress(Node node) {
+    private String getAddress(RedLockProperties.Node node) {
         var address = node.getAddress();
         if (address == null) {
             throw new BeanCreationException("config error! address is required");
@@ -100,7 +92,7 @@ public class RedissonRedLockFactoryImpl implements RedissonRedLockFactory, Initi
         return address;
     }
 
-    private Optional<String> getUsername(Node node) {
+    private Optional<String> getUsername(RedLockProperties.Node node) {
         var username = node.getUsername();
         if (username == null || username.isEmpty()) {
             return Optional.empty();
@@ -109,7 +101,7 @@ public class RedissonRedLockFactoryImpl implements RedissonRedLockFactory, Initi
         }
     }
 
-    private Optional<String> getPassword(Node node) {
+    private Optional<String> getPassword(RedLockProperties.Node node) {
         var pwd = node.getPassword();
         if (pwd == null || pwd.isEmpty()) {
             return Optional.empty();
@@ -117,4 +109,5 @@ public class RedissonRedLockFactoryImpl implements RedissonRedLockFactory, Initi
             return Optional.of(pwd);
         }
     }
+
 }

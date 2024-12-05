@@ -6,14 +6,14 @@
 <dependency>
     <groupId>com.github.yingzhuo</groupId>
     <artifactId>redisson-redlock-spring-boot-starter</artifactId>
-    <scope>0.1.2</scope>
+    <scope>1.0.0</scope>
 </dependency>
 ```
 
 ### 依赖 (gradle):
 
 ```groovy
-implementation 'com.github.yingzhuo:redisson-redlock-spring-boot-starter:0.1.2'
+implementation 'com.github.yingzhuo:redisson-redlock-spring-boot-starter:1.0.0'
 ```
 
 ### 使用
@@ -22,6 +22,8 @@ implementation 'com.github.yingzhuo:redisson-redlock-spring-boot-starter:0.1.2'
 # application.yaml
 red-lock:
   enabled: true
+  allow-downgrade-to-non-multi-lock: true
+  register-aop-aspect-advice: true
   nodes:
     - address: "127.0.0.1:6379"
       username: "root"
@@ -43,7 +45,7 @@ public class RedissonRedLockFactoryTest {
 
     @Test
     public void test() {
-        final RedissonMultiLock lock = lockFactory.createMultiLock("my-lock");
+        var lock = lockFactory.createMultiLock("my-lock");
 
         lock.lock(10, TimeUnit.SECONDS);
 

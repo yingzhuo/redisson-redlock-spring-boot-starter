@@ -3,7 +3,6 @@ package com.github.yingzhuo.springboot.redlock;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -31,11 +30,7 @@ public class UseMultiLockAdvice implements ApplicationContextAware {
         super();
     }
 
-    @Pointcut("@annotation(com.github.yingzhuo.springboot.redlock.UseMultiLock)")
-    public void pc() {
-    }
-
-    @Around("pc()")
+    @Around("@annotation(com.github.yingzhuo.springboot.redlock.UseMultiLock)")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
 
         var annotation = getAnnotation(joinPoint);
@@ -47,7 +42,7 @@ public class UseMultiLockAdvice implements ApplicationContextAware {
 
         var lockName = parseLockName(annotation, joinPoint.getArgs());
 
-        var mLock = lockFactory.createMultiLock(lockName);
+        var mLock = lockFactory.createLock(lockName);
 
         // 加锁
         mLock.lock(annotation.leaseTime(), annotation.leaseTimeUnit());
@@ -82,8 +77,7 @@ public class UseMultiLockAdvice implements ApplicationContextAware {
     }
 
     private String parseLockName(UseMultiLock annotation, Object[] args) {
-
-        var expression = annotation.lockName();
+        var expression = annotation.value();
 
         if (!annotation.usingSpEL()) {
             // 非SpEL

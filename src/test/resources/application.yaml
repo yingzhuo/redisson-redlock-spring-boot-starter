@@ -1,4 +1,7 @@
 red-lock:
+  enabled: true
+  allow-downgrade-to-non-multi-lock: true
+  register-aop-aspect-advice: true
   nodes:
     - address: "localhost:6379"
       username: ""

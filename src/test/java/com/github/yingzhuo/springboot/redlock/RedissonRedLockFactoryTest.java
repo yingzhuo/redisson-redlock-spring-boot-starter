@@ -3,7 +3,6 @@ package com.github.yingzhuo.springboot.redlock;
 import com.github.yingzhuo.springboot.TestApplication;
 import com.github.yingzhuo.springboot.service.MathService;
 import org.junit.jupiter.api.Test;
-import org.redisson.RedissonMultiLock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -20,7 +19,7 @@ public class RedissonRedLockFactoryTest {
 
     @Test
     public void test1() {
-        final RedissonMultiLock lock = lockFactory.createMultiLock("my-lock");
+        var lock = lockFactory.createLock("my-lock");
 
         lock.lock(10, TimeUnit.SECONDS);
 

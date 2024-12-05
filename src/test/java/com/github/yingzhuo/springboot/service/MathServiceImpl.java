@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 public class MathServiceImpl implements MathService {
 
     @Override
-    @UseMultiLock(lockName = "'my-lock' + #args[0] + #args[1]", usingSpEL = true)
+    @UseMultiLock(value = "'my-lock' + #args[0] + #args[1]", usingSpEL = true)
     public int add(int a, int b) {
         return a + b;
     }
