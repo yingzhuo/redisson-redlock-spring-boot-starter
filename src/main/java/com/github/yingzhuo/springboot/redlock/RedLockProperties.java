@@ -32,9 +32,9 @@ public class RedLockProperties implements InitializingBean, Serializable {
     private boolean allowDowngradeToNonMultiLock = false;
 
     /**
-     * 是否注册切面
+     * 切面配置
      */
-    private boolean registerAopAspectAdvice = true;
+    private AspectAdvice aspectAdvice = new AspectAdvice();
 
     /**
      * 红锁需要的Redis主节点
@@ -79,6 +79,24 @@ public class RedLockProperties implements InitializingBean, Serializable {
          */
         @Nullable
         private String password = null;
+    }
+
+    /**
+     * 切面相关配置
+     */
+    @Getter
+    @Setter
+    public static class AspectAdvice implements Serializable {
+
+        /**
+         * 是否启用AOP切面
+         */
+        private boolean enabled = true;
+
+        /**
+         * 顺序
+         */
+        private int order = 100;
     }
 
 }

@@ -7,6 +7,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.core.Ordered;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.lang.Nullable;
@@ -18,10 +19,11 @@ import org.springframework.lang.Nullable;
  * @since 0.2.0
  */
 @Aspect
-public class UseMultiLockAdvice implements ApplicationContextAware {
+public class UseMultiLockAdvice implements ApplicationContextAware, Ordered {
 
     private RedissonRedLockFactory lockFactory = null;
     private ApplicationContext applicationContext = null;
+    private int order;
 
     /**
      * 默认构造方法
@@ -41,7 +43,6 @@ public class UseMultiLockAdvice implements ApplicationContextAware {
         }
 
         var lockName = parseLockName(annotation, joinPoint.getArgs());
-
         var mLock = lockFactory.createLock(lockName);
 
         // 加锁
@@ -64,6 +65,15 @@ public class UseMultiLockAdvice implements ApplicationContextAware {
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
+    }
+
+    @Override
+    public int getOrder() {
+        return this.order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
     }
 
     @Nullable

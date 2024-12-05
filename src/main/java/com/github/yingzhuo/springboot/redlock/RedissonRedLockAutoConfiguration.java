@@ -17,13 +17,13 @@ public class RedissonRedLockAutoConfiguration {
     /**
      * 注册锁的工厂
      *
-     * @param properties 配置项
+     * @param props 配置项
      * @return 工厂实例
      * @since 0.1.0
      */
     @Bean
-    public RedissonRedLockFactory redissonRedLockFactory(RedLockProperties properties) {
-        return new RedissonRedLockFactoryImpl(properties);
+    public RedissonRedLockFactory redissonRedLockFactory(RedLockProperties props) {
+        return new RedissonRedLockFactoryImpl(props);
     }
 
     /**
@@ -35,10 +35,11 @@ public class RedissonRedLockAutoConfiguration {
      * @since 0.2.0
      */
     @Bean
-    @ConditionalOnProperty(prefix = "red-lock", name = "register-aop-aspect-advice", havingValue = "true", matchIfMissing = true)
-    public UseMultiLockAdvice useMultiLockAdvice(RedissonRedLockFactory lockFactory) {
+    @ConditionalOnProperty(prefix = "red-lock.aspect-advice", name = "enabled", havingValue = "true", matchIfMissing = true)
+    public UseMultiLockAdvice useMultiLockAdvice(RedissonRedLockFactory lockFactory, RedLockProperties props) {
         var bean = new UseMultiLockAdvice();
         bean.setLockFactory(lockFactory);
+        bean.setOrder(props.getAspectAdvice().getOrder());
         return bean;
     }
 
