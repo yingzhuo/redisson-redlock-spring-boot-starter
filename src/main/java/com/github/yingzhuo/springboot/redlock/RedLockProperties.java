@@ -80,6 +80,12 @@ public class RedLockProperties implements InitializingBean, Serializable {
          */
         @Nullable
         private String password = null;
+
+        /**
+         * database
+         */
+        private int database = 0;
+
     }
 
     /**

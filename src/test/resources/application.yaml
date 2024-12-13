@@ -1,7 +1,9 @@
 red-lock:
   enabled: true
   allow-downgrade-to-non-multi-lock: true
-  register-aop-aspect-advice: true
+  aspect-advice:
+    enabled: true
+    order: -10000000
   nodes:
     - address: "localhost:6379"
       username: ""

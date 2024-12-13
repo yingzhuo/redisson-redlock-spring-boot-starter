@@ -9,6 +9,7 @@ import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +27,9 @@ public class RedissonRedLockFactoryImpl implements RedissonRedLockFactory, Initi
     private final int size;
     private final List<RedLockProperties.Node> nodeConfigs;
     private final List<RedissonClient> clients;
+
+    @Nullable
+    private ServerConfigCustomizer serverConfigCustomizer;
 
     /**
      * 构造方法
@@ -58,8 +62,20 @@ public class RedissonRedLockFactoryImpl implements RedissonRedLockFactory, Initi
             // empty string means null
             getPassword(node).ifPresent(singleServerConf::setPassword);
 
+            // database
+            singleServerConf.setDatabase(getDatabase(node));
+
+            // 客制化
+            if (serverConfigCustomizer != null) {
+                serverConfigCustomizer.custom(singleServerConf);
+            }
+
             clients.add(Redisson.create(conf));
         }
+    }
+
+    public void setServerConfigCustomizer(@Nullable ServerConfigCustomizer serverConfigCustomizer) {
+        this.serverConfigCustomizer = serverConfigCustomizer;
     }
 
     /**
@@ -108,6 +124,10 @@ public class RedissonRedLockFactoryImpl implements RedissonRedLockFactory, Initi
         } else {
             return Optional.of(pwd);
         }
+    }
+
+    private int getDatabase(RedLockProperties.Node node) {
+        return node.getDatabase();
     }
 
 }

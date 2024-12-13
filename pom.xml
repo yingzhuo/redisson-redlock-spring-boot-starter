@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.yingzhuo</groupId>
     <artifactId>redisson-redlock-spring-boot-starter</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
     <url>https://github.com/yingzhuo/redisson-redlock-spring-boot-starter</url>
     <description>spring-boot starter for redisson RedLock/MultiLock</description>
@@ -169,7 +169,7 @@
         <dependency>
             <groupId>org.redisson</groupId>
             <artifactId>redisson</artifactId>
-            <version>3.39.0</version>
+            <version>3.40.1</version>
         </dependency>
 
         <!-- lombok -->

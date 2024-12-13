@@ -1,8 +1,12 @@
 package com.github.yingzhuo.springboot.redlock;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.lang.Nullable;
+
+import java.util.Objects;
 
 /**
  * 自动配置类
@@ -22,8 +26,14 @@ public class RedissonRedLockAutoConfiguration {
      * @since 0.1.0
      */
     @Bean
-    public RedissonRedLockFactory redissonRedLockFactory(RedLockProperties props) {
-        return new RedissonRedLockFactoryImpl(props);
+    public RedissonRedLockFactory redissonRedLockFactory(RedLockProperties props,
+                                                         @Nullable @Autowired(required = false) ServerConfigCustomizer customizer
+    ) {
+        // @formatter:off
+        var bean = new RedissonRedLockFactoryImpl(props);
+        bean.setServerConfigCustomizer(Objects.requireNonNullElse(customizer, __ -> {}));
+        return bean;
+        // @formatter:on
     }
 
     /**
@@ -36,7 +46,9 @@ public class RedissonRedLockAutoConfiguration {
      */
     @Bean
     @ConditionalOnProperty(prefix = "red-lock.aspect-advice", name = "enabled", havingValue = "true", matchIfMissing = true)
-    public UseMultiLockAdvice useMultiLockAdvice(RedissonRedLockFactory lockFactory, RedLockProperties props) {
+    public UseMultiLockAdvice useMultiLockAdvice(
+            RedissonRedLockFactory lockFactory,
+            RedLockProperties props) {
         var bean = new UseMultiLockAdvice();
         bean.setLockFactory(lockFactory);
         bean.setOrder(props.getAspectAdvice().getOrder());
