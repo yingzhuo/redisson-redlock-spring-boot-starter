@@ -8,6 +8,7 @@ import org.springframework.core.Ordered;
 import org.springframework.lang.Nullable;
 
 import java.io.Serializable;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,6 +64,9 @@ public class RedLockProperties implements InitializingBean, Serializable {
     @Setter
     public static class Node implements Serializable {
 
+        @Nullable
+        private String clientName;
+
         /**
          * 节点地址 (例: redis://127.0.0.1:6379)
          */
@@ -86,6 +90,35 @@ public class RedLockProperties implements InitializingBean, Serializable {
          */
         private int database = 0;
 
+        /**
+         * Minimum idle Redis connection amount
+         */
+        private int connectionMinimumIdleSize = 24;
+
+        /**
+         * Redis connection maximum pool size
+         */
+        private int connectionPoolSize = 64;
+
+        /**
+         * If pooled connection not used for a <code>timeout</code> time
+         * and current connections amount bigger than minimum idle connections pool size,
+         * then it will be closed and removed from pool.
+         * Value in milliseconds.
+         */
+        private Duration idleConnectionTimeout = Duration.ofMillis(10000L);
+
+        /**
+         * Timeout during connecting to any Redis server.
+         * Value in milliseconds.
+         */
+        private Duration connectTimeout = Duration.ofMillis(10000L);
+
+        /**
+         * Redis server response timeout. Starts to countdown when Redis command was successfully sent.
+         * Value in milliseconds.
+         */
+        private Duration timeout = Duration.ofMillis(3000L);
     }
 
     /**

@@ -51,6 +51,9 @@ public class RedissonRedLockFactoryImpl implements RedissonRedLockFactory, Initi
             var conf = new Config();
             var singleServerConf = conf.useSingleServer();
 
+            // clientName (optional)
+            getClientName(node).ifPresent(singleServerConf::setClientName);
+
             // host + port
             singleServerConf.setAddress(getAddress(node));
 
@@ -64,6 +67,15 @@ public class RedissonRedLockFactoryImpl implements RedissonRedLockFactory, Initi
 
             // database
             singleServerConf.setDatabase(getDatabase(node));
+
+            // connection pool
+            singleServerConf.setConnectionPoolSize(node.getConnectionPoolSize());
+            singleServerConf.setConnectionMinimumIdleSize(node.getConnectionMinimumIdleSize());
+            singleServerConf.setIdleConnectionTimeout((int) node.getIdleConnectionTimeout().toMillis());
+
+            // connection
+            singleServerConf.setConnectTimeout((int) node.getConnectTimeout().toMillis());
+            singleServerConf.setTimeout((int) node.getTimeout().toMillis());
 
             // 客制化
             if (serverConfigCustomizer != null) {
@@ -123,6 +135,15 @@ public class RedissonRedLockFactoryImpl implements RedissonRedLockFactory, Initi
             return Optional.empty();
         } else {
             return Optional.of(pwd);
+        }
+    }
+
+    private Optional<String> getClientName(RedLockProperties.Node node) {
+        var clientName = node.getClientName();
+        if (clientName == null || clientName.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(clientName);
         }
     }
 

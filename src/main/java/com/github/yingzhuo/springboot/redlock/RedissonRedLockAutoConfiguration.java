@@ -6,8 +6,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.lang.Nullable;
 
-import java.util.Objects;
-
 /**
  * 自动配置类
  *
@@ -26,14 +24,13 @@ public class RedissonRedLockAutoConfiguration {
      * @since 0.1.0
      */
     @Bean
-    public RedissonRedLockFactory redissonRedLockFactory(RedLockProperties props,
-                                                         @Nullable @Autowired(required = false) ServerConfigCustomizer customizer
+    public RedissonRedLockFactory redissonRedLockFactory(
+            RedLockProperties props,
+            @Nullable @Autowired(required = false) ServerConfigCustomizer customizer
     ) {
-        // @formatter:off
         var bean = new RedissonRedLockFactoryImpl(props);
-        bean.setServerConfigCustomizer(Objects.requireNonNullElse(customizer, __ -> {}));
+        bean.setServerConfigCustomizer(customizer);
         return bean;
-        // @formatter:on
     }
 
     /**
