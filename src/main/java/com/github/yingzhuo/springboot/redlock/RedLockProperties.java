@@ -64,6 +64,9 @@ public class RedLockProperties implements InitializingBean, Serializable {
     @Setter
     public static class Node implements Serializable {
 
+        /**
+         * 节点名称
+         */
         @Nullable
         private String clientName;
 
