@@ -1,19 +1,21 @@
 # redisson-redlock-spring-boot-starter
 
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.yingzhuo/redisson-redlock-spring-boot-starter.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.yingzhuo%22%20AND%20a:%22redisson-redlock-spring-boot-starter%22)
+
 ### 依赖 (maven):
 
 ```xml
 <dependency>
     <groupId>com.github.yingzhuo</groupId>
     <artifactId>redisson-redlock-spring-boot-starter</artifactId>
-    <scope>1.0.0</scope>
+    <scope>1.0.4</scope>
 </dependency>
 ```
 
 ### 依赖 (gradle):
 
 ```groovy
-implementation 'com.github.yingzhuo:redisson-redlock-spring-boot-starter:1.0.0'
+implementation 'com.github.yingzhuo:redisson-redlock-spring-boot-starter:1.0.4'
 ```
 
 ### 使用
@@ -52,15 +54,12 @@ public class RedissonRedLockFactoryTest {
         try {
             System.out.println("do some work.");
             System.out.println("do some work.");
-            System.out.println("do some work.");
-            System.out.println("do some work.");
         } finally {
             if (lock.isHeldByCurrentThread()) {
                 lock.unlock();
             }
         }
     }
-
 }
 ```
 
