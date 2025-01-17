@@ -9,7 +9,6 @@ usage:
 	@echo "package =>  打包"
 	@echo "deploy  =>  发布"
 	@echo "install =>  本地安装"
-	@echo "version =>  调整版本号"
 	@echo "github  =>  提交源代码"
 	@echo "=============================================================="
 
@@ -28,11 +27,6 @@ deploy:
 install:
 	@mvn -f $(CURDIR)/pom.xml clean install -Dmaven.test.skip=true
 
-version:
-	@mvn -f $(CURDIR)/pom.xml versions:set
-	@mvn -f $(CURDIR)/pom.xml -N versions:update-child-modules
-	@mvn -f $(CURDIR)/pom.xml versions:commit
-
 clean:
 	@mvn -f $(CURDIR)/pom.xml clean -q
 
@@ -41,4 +35,4 @@ github: clean
 	@git commit -m "$(timestamp)"
 	@git push
 
-.PHONY: usage compile test clean package install deploy version github
+.PHONY: usage compile test clean package install deploy github
