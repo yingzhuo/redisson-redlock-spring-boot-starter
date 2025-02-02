@@ -1,4 +1,5 @@
 //file:noinspection GroovyAssignabilityCheck
+
 plugins {
     id 'java'
     id 'maven-publish'
@@ -7,7 +8,7 @@ plugins {
 }
 
 group = 'com.github.yingzhuo'
-version = '1.0.6'
+version = '1.1.0'
 
 ext {
     set('pomGroupId', 'com.github.yingzhuo')
@@ -99,7 +100,7 @@ publishing {
                         url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
                     }
                 }
-                developers { // put the developers here
+                developers {
                     developer {
                         id = 'yingzhuo'
                         name = '应卓'
