@@ -8,7 +8,7 @@ plugins {
 }
 
 group = 'com.github.yingzhuo'
-version = '1.1.0'
+version = '3.44.0'
 
 ext {
     set('pomGroupId', 'com.github.yingzhuo')
@@ -86,6 +86,15 @@ publishing {
             artifactId = "${pomArtifactId}"
             version = "${pomVersion}"
 
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+
             from components.java
 
             pom {
@@ -121,8 +130,8 @@ publishing {
             name = "OSSRH"
 
             def releaseUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-            def snapShotUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
-            url = version.endsWith('SNAPSHOT') ? snapShotUrl : releaseUrl
+            def snapshotUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+            url = version.endsWith('SNAPSHOT') ? snapshotUrl : releaseUrl
 
             credentials {
                 username = System.getenv("OSSRH_TOKEN_USERNAME")

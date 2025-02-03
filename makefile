@@ -35,4 +35,4 @@ github: clean
 	@git commit -m "$(shell /bin/date "+%F %T")"
 	@git push
 
-.PHONY: usage compile publish install clean github
+.PHONY: usage compile build publish install clean github
