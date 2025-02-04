@@ -48,7 +48,7 @@ public class RedLockProperties implements InitializingBean, Serializable {
      */
     @Override
     public void afterPropertiesSet() {
-        if (nodes.size() == 0) {
+        if (nodes.isEmpty()) {
             throw new IllegalArgumentException("config error! node not defined");
         }
 
