@@ -27,4 +27,3 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = 'redisson-redlock-spring-boot-starter'
-includeBuild 'gradle/plugin'
