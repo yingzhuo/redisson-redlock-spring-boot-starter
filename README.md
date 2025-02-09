@@ -15,7 +15,7 @@
 ### 依赖 (gradle):
 
 ```groovy
-implementation 'com.github.yingzhuo:redisson-redlock-spring-boot-starter:1.1.0'
+implementation 'com.github.yingzhuo:redisson-redlock-spring-boot-starter:3.44.0'
 ```
 
 ### 使用
