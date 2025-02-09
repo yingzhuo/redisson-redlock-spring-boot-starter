@@ -8,7 +8,7 @@
 <dependency>
     <groupId>com.github.yingzhuo</groupId>
     <artifactId>redisson-redlock-spring-boot-starter</artifactId>
-    <scope>1.1.0</scope>
+    <scope>3.44.0</scope>
 </dependency>
 ```
 
