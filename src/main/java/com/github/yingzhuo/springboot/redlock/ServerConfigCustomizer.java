@@ -25,11 +25,11 @@ import org.redisson.config.SingleServerConfig;
 @FunctionalInterface
 public interface ServerConfigCustomizer {
 
-    /**
-     * 客制
-     *
-     * @param config 配置
-     */
-    public void custom(SingleServerConfig config);
+	/**
+	 * 客制
+	 *
+	 * @param config 配置
+	 */
+	public void custom(SingleServerConfig config);
 
 }

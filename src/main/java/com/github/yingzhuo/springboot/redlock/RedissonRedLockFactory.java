@@ -27,17 +27,17 @@ import java.util.function.Function;
 @FunctionalInterface
 public interface RedissonRedLockFactory extends Function<String, RLock> {
 
-    /**
-     * 创建多联锁
-     *
-     * @param lockName 锁名称
-     * @return 多联锁实例
-     */
-    public RLock createLock(String lockName);
+	/**
+	 * 创建多联锁
+	 *
+	 * @param lockName 锁名称
+	 * @return 多联锁实例
+	 */
+	public RLock createLock(String lockName);
 
-    @Override
-    public default RLock apply(String lockName) {
-        return createLock(lockName);
-    }
+	@Override
+	public default RLock apply(String lockName) {
+		return createLock(lockName);
+	}
 
 }

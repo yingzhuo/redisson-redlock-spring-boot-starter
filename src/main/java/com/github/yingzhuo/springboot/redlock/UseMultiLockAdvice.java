@@ -41,104 +41,104 @@ import java.lang.reflect.Method;
 @Aspect
 public class UseMultiLockAdvice implements ApplicationContextAware, Ordered {
 
-    /**
-     * 表达式解析器
-     */
-    private static final ExpressionParser EXPRESSION_PARSER;
+	/**
+	 * 表达式解析器
+	 */
+	private static final ExpressionParser EXPRESSION_PARSER;
 
-    static {
-        var config = new SpelParserConfiguration(true, true);
-        EXPRESSION_PARSER = new SpelExpressionParser(config);
-    }
+	static {
+		var config = new SpelParserConfiguration(true, true);
+		EXPRESSION_PARSER = new SpelExpressionParser(config);
+	}
 
-    private RedissonRedLockFactory lockFactory = null;
-    private ApplicationContext applicationContext = null;
-    private int order = Ordered.LOWEST_PRECEDENCE;
+	private RedissonRedLockFactory lockFactory = null;
+	private ApplicationContext applicationContext = null;
+	private int order = Ordered.LOWEST_PRECEDENCE;
 
-    /**
-     * 默认构造方法
-     */
-    public UseMultiLockAdvice() {
-        super();
-    }
+	/**
+	 * 默认构造方法
+	 */
+	public UseMultiLockAdvice() {
+		super();
+	}
 
-    @Around("@annotation(com.github.yingzhuo.springboot.redlock.UseMultiLock)")
-    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
+	@Around("@annotation(com.github.yingzhuo.springboot.redlock.UseMultiLock)")
+	public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
 
-        var annotation = getAnnotation(joinPoint);
+		var annotation = getAnnotation(joinPoint);
 
-        // 居然没有元注释，这不可能
-        if (annotation == null) {
-            return joinPoint.proceed();
-        }
+		// 居然没有元注释，这不可能
+		if (annotation == null) {
+			return joinPoint.proceed();
+		}
 
-        var lockName = parseLockName(annotation, joinPoint);
-        var mLock = lockFactory.createLock(lockName);
+		var lockName = parseLockName(annotation, joinPoint);
+		var mLock = lockFactory.createLock(lockName);
 
-        // 加锁
-        mLock.lock(annotation.leaseTime(), annotation.leaseTimeUnit());
+		// 加锁
+		mLock.lock(annotation.leaseTime(), annotation.leaseTimeUnit());
 
-        try {
-            return joinPoint.proceed();
-        } finally {
-            // 解锁
-            if (mLock.isHeldByCurrentThread()) {
-                mLock.unlock();
-            }
-        }
-    }
+		try {
+			return joinPoint.proceed();
+		} finally {
+			// 解锁
+			if (mLock.isHeldByCurrentThread()) {
+				mLock.unlock();
+			}
+		}
+	}
 
-    public void setLockFactory(RedissonRedLockFactory lockFactory) {
-        this.lockFactory = lockFactory;
-    }
+	public void setLockFactory(RedissonRedLockFactory lockFactory) {
+		this.lockFactory = lockFactory;
+	}
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		this.applicationContext = applicationContext;
+	}
 
-    @Override
-    public int getOrder() {
-        return this.order;
-    }
+	@Override
+	public int getOrder() {
+		return this.order;
+	}
 
-    public void setOrder(int order) {
-        this.order = order;
-    }
+	public void setOrder(int order) {
+		this.order = order;
+	}
 
-    @Nullable
-    private UseMultiLock getAnnotation(ProceedingJoinPoint joinPoint) {
-        return getMethod(joinPoint).getAnnotation(UseMultiLock.class);
-    }
+	@Nullable
+	private UseMultiLock getAnnotation(ProceedingJoinPoint joinPoint) {
+		return getMethod(joinPoint).getAnnotation(UseMultiLock.class);
+	}
 
-    private String parseLockName(UseMultiLock annotation, ProceedingJoinPoint joinPoint) {
-        var expression = annotation.value();
+	private String parseLockName(UseMultiLock annotation, ProceedingJoinPoint joinPoint) {
+		var expression = annotation.value();
 
-        if (!annotation.usingSpEL()) {
-            // 非SpEL
-            if (expression == null || expression.isBlank()) {
-                throw new IllegalArgumentException("lockName is required");
-            } else {
-                return expression;
-            }
-        } else {
-            // SpEL解析
-            var context = new StandardEvaluationContext(applicationContext);
-            context.setVariable("args", joinPoint.getArgs());
-            context.setVariable("method", getMethod(joinPoint).getName());
+		if (!annotation.usingSpEL()) {
+			// 非SpEL
+			if (expression == null || expression.isBlank()) {
+				throw new IllegalArgumentException("lockName is required");
+			} else {
+				return expression;
+			}
+		} else {
+			// SpEL解析
+			var context = new StandardEvaluationContext(applicationContext);
+			context.setVariable("args", joinPoint.getArgs());
+			context.setVariable("method", getMethod(joinPoint).getName());
 
-            return (String) EXPRESSION_PARSER
-                    .parseExpression(expression).getValue(context);
-        }
-    }
+			return (String) EXPRESSION_PARSER
+				.parseExpression(expression).getValue(context);
+		}
+	}
 
-    private Method getMethod(ProceedingJoinPoint joinPoint) {
-        var s = joinPoint.getSignature();
-        if (s instanceof MethodSignature ms) {
-            return ms.getMethod();
-        } else {
-            throw new AssertionError();
-        }
-    }
+	private Method getMethod(ProceedingJoinPoint joinPoint) {
+		var s = joinPoint.getSignature();
+		if (s instanceof MethodSignature ms) {
+			return ms.getMethod();
+		} else {
+			throw new AssertionError();
+		}
+	}
 
 }
