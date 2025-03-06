@@ -124,14 +124,12 @@ publishing {
 	repositories {
 		maven {
 			name = 'OSSRH'
-
-			def releaseUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-			def snapshotUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
-			url = version.endsWith('SNAPSHOT') ? snapshotUrl : releaseUrl
+			url = rootProject.version.endsWith('SNAPSHOT') ? "${ossrhSnapshotUrl}" : "${ossrhReleaseUrl}"
 
 			credentials {
-				username = providers.gradleProperty('ossrh.token.username').getOrNull()
-				password = providers.gradleProperty('ossrh.token.password').getOrNull()
+				// 私密信息在 $GRADLE_USER_HOME/gradle.properties
+				username = "${ossrhTokenUsername}"
+				password = "${ossrhTokenPassword}"
 			}
 		}
 	}
