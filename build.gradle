@@ -8,14 +8,7 @@ plugins {
 }
 
 group = 'com.github.yingzhuo'
-version = '3.45.0'
-
-ext {
-	set('pomGroupId', "com.github.yingzhuo")
-	set('pomVersion', "${project.version}")
-	set('pomArtifactId', 'redisson-redlock-spring-boot-starter')
-	set('pomArtifactName', 'redisson-redlock-spring-boot-starter')
-}
+version = '3.45.1'
 
 dependencyManagement {
 	imports {
@@ -39,7 +32,7 @@ dependencies {
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
 	// redisson
-	implementation 'org.redisson:redisson:3.45.0'
+	implementation 'org.redisson:redisson:3.45.1'
 
 	// lombok
 	compileOnly 'org.projectlombok:lombok'
@@ -78,9 +71,9 @@ test {
 publishing {
 	publications {
 		mavenJava(MavenPublication) {
-			groupId = "${pomGroupId}"
-			artifactId = "${pomArtifactId}"
-			version = "${pomVersion}"
+			groupId = "${project.group}"
+			artifactId = 'redisson-redlock-spring-boot-starter'
+			version = "${project.version}"
 
 			versionMapping {
 				usage('java-api') {
@@ -94,7 +87,7 @@ publishing {
 			from components.java
 
 			pom {
-				name = "${pomArtifactName}"
+				name = 'redisson-redlock-spring-boot-starter'
 				description = 'spring-boot starter for redisson RedLock/MultiLock'
 				url = 'https://github.com/yingzhuo/redisson-redlock-spring-boot-starter'
 				inceptionYear = '2025'
@@ -105,13 +98,17 @@ publishing {
 						url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
 					}
 				}
+
 				developers {
 					developer {
 						id = 'yingzhuo'
 						name = '应卓'
 						email = 'yingzhor@gmail.com'
+						roles = ['author']
+						url = 'https://github.com/yingzhuo'
 					}
 				}
+
 				scm {
 					url = 'git@github.com:yingzhuo/redisson-redlock-spring-boot-starter.git'
 					connection = 'scm:git:git@github.com:yingzhuo/redisson-redlock-spring-boot-starter.git'
@@ -128,8 +125,8 @@ publishing {
 
 			credentials {
 				// 私密信息在 $GRADLE_USER_HOME/gradle.properties
-				username = "${ossrhTokenUsername}"
-				password = "${ossrhTokenPassword}"
+				username = getPropertyOrEmpty('ossrhTokenUsername')
+				password = getPropertyOrEmpty('ossrhTokenPassword')
 			}
 		}
 	}
@@ -142,4 +139,15 @@ signing {
 
 tasks.withType(GenerateModuleMetadata).configureEach {
 	enabled = false
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+private String getPropertyOrEmpty(String propertyName) {
+	try {
+		var value = getProperty(propertyName).toString()
+		return value.trim()
+	} catch (MissingPropertyException ignored) {
+		return ''
+	}
 }
