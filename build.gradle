@@ -71,6 +71,8 @@ test {
 publishing {
 	publications {
 		mavenJava(MavenPublication) {
+			from components.java
+
 			groupId = "${project.group}"
 			artifactId = 'redisson-redlock-spring-boot-starter'
 			version = "${project.version}"
@@ -83,8 +85,6 @@ publishing {
 					fromResolutionResult()
 				}
 			}
-
-			from components.java
 
 			pom {
 				name = 'redisson-redlock-spring-boot-starter'
