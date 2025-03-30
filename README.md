@@ -8,14 +8,14 @@
 <dependency>
     <groupId>com.github.yingzhuo</groupId>
     <artifactId>redisson-redlock-spring-boot-starter</artifactId>
-    <scope>3.44.0</scope>
+    <scope>3.45.1</scope>
 </dependency>
 ```
 
 ### 依赖 (gradle):
 
 ```groovy
-implementation 'com.github.yingzhuo:redisson-redlock-spring-boot-starter:3.44.0'
+implementation 'com.github.yingzhuo:redisson-redlock-spring-boot-starter:3.45.1'
 ```
 
 ### 使用
