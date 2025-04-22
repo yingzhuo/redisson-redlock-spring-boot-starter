@@ -6,10 +6,8 @@ plugins {
 	id 'io.gitee.pkmer.pkmerboot-central-publisher'
 }
 
-allprojects {
-	group = 'com.github.yingzhuo'
-	version = '3.45.1'
-}
+group = 'com.github.yingzhuo'
+version = '3.45.1'
 
 dependencyManagement {
 	imports {
