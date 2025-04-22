@@ -11,19 +11,16 @@ usage:
 	@echo "=============================================================="
 
 wrapper:
-	@gradle wrapper --gradle-distribution-url 'https://mirrors.cloud.tencent.com/gradle/gradle-8.12.1-bin.zip'
+	@gradle wrapper
 
 compile:
-	@gradlew classes
-
-build:
-	@gradlew build -x test
-
-publish:
-	@gradlew publish -x test
+	@$(CURDIR)/gradlew --project-dir $(CURDIR) classes
 
 install:
-	@gradlew publishToMavenLocal -x test
+	@$(CURDIR)/gradlew --project-dir $(CURDIR) -Dorg.gradle.parallel=false -x "test" -x "check" "publishToMavenLocal"
+
+publish: install
+	@$(CURDIR)/gradlew --project-dir $(CURDIR) -Dorg.gradle.parallel=false -x "test" -x "check" "publishToMavenCentralPortal"
 
 clean:
 	@gradlew clean -q

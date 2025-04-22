@@ -3,6 +3,7 @@ plugins {
 	id 'signing'
 	id 'maven-publish'
 	id 'io.spring.dependency-management'
+	id 'io.gitee.pkmer.pkmerboot-central-publisher'
 }
 
 allprojects {
@@ -12,7 +13,7 @@ allprojects {
 
 dependencyManagement {
 	imports {
-		mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+		mavenBom("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
 	}
 }
 
@@ -127,14 +128,8 @@ publishing {
 
 	repositories {
 		maven {
-			name = 'OSSRH'
-			url = rootProject.version.endsWith('SNAPSHOT') ? "${ossrhSnapshotUrl}" : "${ossrhReleaseUrl}"
-
-			credentials {
-				// 私密信息在 $GRADLE_USER_HOME/gradle.properties
-				username = getPropertyOrEmpty('ossrhTokenUsername')
-				password = getPropertyOrEmpty('ossrhTokenPassword')
-			}
+			name = "Local"
+			url = layout.buildDirectory.dir('repos/bundles')
 		}
 	}
 }
@@ -144,24 +139,21 @@ signing {
 	sign publishing.publications.mavenJava
 }
 
+pkmerBoot {
+	sonatypeMavenCentral {
+		stagingRepository = layout.buildDirectory.dir("repos/bundles")
+		username = getProperty('sonatypeUsername')
+		password = getProperty('sonatypePassword')
+	}
+}
+
 tasks.withType(GenerateModuleMetadata).configureEach {
 	enabled = false
 }
 
 tasks.named('wrapper') { task ->
 	// 国内镜像两个比较好的选择
-	// (1) 腾讯云: https://mirrors.cloud.tencent.com/gradle/gradle-${gradleVersion}-bin.zip
-	// (2) 华为云: https://mirrors.huaweicloud.com/gradle/gradle-${gradleVersion}-bin.zip
-	distributionUrl = "https://mirrors.cloud.tencent.com/gradle/gradle-${gradleVersion}-bin.zip"
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-
-private String getPropertyOrEmpty(String propertyName) {
-	try {
-		var value = getProperty(propertyName).toString()
-		return value.trim()
-	} catch (MissingPropertyException ignored) {
-		return ''
-	}
+	// (1) 腾讯云: https://mirrors.cloud.tencent.com/gradle/gradle-$gradleVersion-bin.zip
+	// (2) 华为云: https://mirrors.huaweicloud.com/gradle/gradle-$gradleVersion-bin.zip
+	distributionUrl = "https://mirrors.cloud.tencent.com/gradle/gradle-$gradleVersion-bin.zip"
 }
