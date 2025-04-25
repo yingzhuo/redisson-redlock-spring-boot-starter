@@ -34,12 +34,8 @@ hs_err_pid*
 .kotlin/
 build/
 bin/
-
 !/**/src/**/build
 !/**/src/**/bin
-
-!gradle/wrapper/gradle-wrapper.jar
-!gradle/wrapper/gradle-wrapper.properties
 
 # --------------------------------------
 # 构建产物等
@@ -51,6 +47,7 @@ bin/
 *.tgz
 *.rar
 *.7z
+!gradle/wrapper/gradle-wrapper.jar
 
 # --------------------------------------
 # temporary files

@@ -1,6 +1,12 @@
-# redisson-redlock-spring-boot-starter
+## redisson-redlock-spring-boot-starter
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.yingzhuo/redisson-redlock-spring-boot-starter.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.yingzhuo%22%20AND%20a:%22redisson-redlock-spring-boot-starter%22)
+
+### 依赖 (gradle):
+
+```groovy
+implementation 'com.github.yingzhuo:redisson-redlock-spring-boot-starter:3.45.1'
+```
 
 ### 依赖 (maven):
 
@@ -10,12 +16,6 @@
     <artifactId>redisson-redlock-spring-boot-starter</artifactId>
     <scope>3.45.1</scope>
 </dependency>
-```
-
-### 依赖 (gradle):
-
-```groovy
-implementation 'com.github.yingzhuo:redisson-redlock-spring-boot-starter:3.45.1'
 ```
 
 ### 使用
