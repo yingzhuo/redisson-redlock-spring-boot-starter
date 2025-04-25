@@ -19,10 +19,10 @@ compile:
 	gradlew "classes"
 
 install:
-	gradlew --no-parallel -x "test" -x "check" "publishToMavenLocal"
+	gradlew -x "test" -x "check" "publishToMavenLocal"
 
 publish: install
-	gradlew --no-parallel -x "test" -x "check" "publishToMavenCentralPortal"
+	gradlew -x "test" -x "check" "publishToMavenCentralPortal"
 
 push-all-codes: clean
 	git status
