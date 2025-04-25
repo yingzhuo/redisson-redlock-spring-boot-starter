@@ -22,6 +22,7 @@ plugins {
 	id 'io.gitee.pkmer.pkmerboot-central-publisher' version "$mavenCentralPublisherPluginVersion" apply false
 }
 
+
 dependencyResolutionManagement {
 	repositories {
 		mavenLocal()
