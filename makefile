@@ -6,28 +6,29 @@ usage:
 	@echo "clean                 =>  清理"
 	@echo "publish               =>  发布"
 	@echo "install               =>  本地安装"
-	@echo "github                =>  提交源代码"
+	@echo "push-all-codes        =>  提交源代码"
 	@echo "=============================================================="
 
 clean:
-	@$(CURDIR)/gradlew --project-dir $(CURDIR) --quiet "clean"
+	gradlew -q "clean"
 
 setup-gradle-wrapper:
-	@gradle --project-dir $(CURDIR) "wrapper"
+	gradle "wrapper"
 
 compile:
-	@$(CURDIR)/gradlew --project-dir $(CURDIR) classes
+	gradlew "classes"
 
 install:
-	@$(CURDIR)/gradlew --project-dir $(CURDIR) -Dorg.gradle.parallel=false -x "test" -x "check" "publishToMavenLocal"
+	gradlew --no-parallel -x "test" -x "check" "publishToMavenLocal"
 
 publish: install
-	@$(CURDIR)/gradlew --project-dir $(CURDIR) -Dorg.gradle.parallel=false -x "test" -x "check" "publishToMavenCentralPortal"
+	gradlew --no-parallel -x "test" -x "check" "publishToMavenCentralPortal"
 
-github: clean
-	@git status
-	@git add .
-	@git commit -m "$(shell /bin/date "+%F %T")"
-	@git push
+push-all-codes: clean
+	git status
+	git add .
+	git commit -m "$(shell /bin/date "+%F %T")"
+	git push github
+	git push gitee
 
-.PHONY: usage setup-gradle-wrapper compile publish install clean github
+.PHONY: usage setup-gradle-wrapper compile publish install clean push-all-codes

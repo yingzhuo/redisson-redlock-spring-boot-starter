@@ -40,4 +40,4 @@ dependencyResolutionManagement {
 	}
 }
 
-rootProject.name = "redisson-redlock-spring-boot-starter"
+rootProject.name = 'redisson-redlock-spring-boot-starter'
