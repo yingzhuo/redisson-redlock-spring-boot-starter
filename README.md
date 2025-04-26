@@ -1,11 +1,13 @@
 ## redisson-redlock-spring-boot-starter
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.github.yingzhuo/redisson-redlock-spring-boot-starter.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.yingzhuo%22%20AND%20a:%22redisson-redlock-spring-boot-starter%22)
+[![License](https://img.shields.io/badge/License-Apache%20v2.0-red?style=flat-square)](https://www.apache.org/licenses/LICENSE-2.0)
+[![Author](https://img.shields.io/badge/yingzhor%40gmail.com-F0FF00?style=flat-square)](mailto:yingzhor@gmail.com)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.yingzhuo/redisson-redlock-spring-boot-starter.svg?label=Maven%20Central&style=flat-square)](https://search.maven.org/search?q=g:%22com.github.yingzhuo%22%20AND%20a:%22redisson-redlock-spring-boot-starter%22)
 
 ### 依赖 (gradle):
 
 ```groovy
-implementation 'com.github.yingzhuo:redisson-redlock-spring-boot-starter:3.45.1'
+implementation 'com.github.yingzhuo:redisson-redlock-spring-boot-starter:${version}'
 ```
 
 ### 依赖 (maven):
@@ -14,7 +16,7 @@ implementation 'com.github.yingzhuo:redisson-redlock-spring-boot-starter:3.45.1'
 <dependency>
     <groupId>com.github.yingzhuo</groupId>
     <artifactId>redisson-redlock-spring-boot-starter</artifactId>
-    <scope>3.45.1</scope>
+    <scope>${version}</scope>
 </dependency>
 ```
 
