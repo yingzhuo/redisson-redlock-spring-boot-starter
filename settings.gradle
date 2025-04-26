@@ -7,13 +7,13 @@ pluginManagement {
 			.forEach { line ->
 				line = line.trim()
 				if (!line.isBlank() && !line.startsWith('#')) {
-					maven { url = uri(line.trim()); allowInsecureProtocol = true }
+					maven { url = uri(line); allowInsecureProtocol = true }
 				}
 			}
 
 		gradlePluginPortal()
 		mavenCentral()
-		google()
+		//google()
 	}
 }
 
@@ -21,7 +21,6 @@ plugins {
 	id 'io.spring.dependency-management' version "$dependencyManagementPluginVersion" apply false
 	id 'io.gitee.pkmer.pkmerboot-central-publisher' version "$mavenCentralPublisherPluginVersion" apply false
 }
-
 
 dependencyResolutionManagement {
 	repositories {
@@ -32,12 +31,12 @@ dependencyResolutionManagement {
 			.forEach { line ->
 				line = line.trim()
 				if (!line.isBlank() && !line.startsWith('#')) {
-					maven { url = uri(line.trim()); allowInsecureProtocol = true }
+					maven { url = uri(line); allowInsecureProtocol = true }
 				}
 			}
 
 		mavenCentral()
-		google()
+		//google()
 	}
 }
 

@@ -11,7 +11,8 @@ version = '3.45.1'
 
 dependencyManagement {
 	imports {
-		mavenBom("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
+		mavenBom("org.springframework.boot:spring-boot-dependencies:$springBootVersion") {
+		}
 	}
 }
 
@@ -60,7 +61,7 @@ jar {
 	manifest {
 		attributes([
 			'Module-Name'           : "${project.name}",
-			'Implementation-Version': "${project.version}"
+			'Implementation-Version': "${project.version}",
 		])
 	}
 }
@@ -72,6 +73,13 @@ javadoc {
 
 test {
 	useJUnitPlatform()
+}
+
+tasks.named('wrapper') { task ->
+	// 国内镜像两个比较好的选择
+	// (1) 腾讯云: https://mirrors.cloud.tencent.com/gradle/gradle-$gradleVersion-bin.zip
+	// (2) 华为云: https://mirrors.huaweicloud.com/gradle/gradle-$gradleVersion-bin.zip
+	distributionUrl = "https://mirrors.cloud.tencent.com/gradle/gradle-$gradleVersion-bin.zip"
 }
 
 publishing {
@@ -140,8 +148,8 @@ signing {
 pkmerBoot {
 	sonatypeMavenCentral {
 		stagingRepository = layout.buildDirectory.dir("repos/bundles")
-		username = getProperty('sonatypeUsername')
-		password = getProperty('sonatypePassword')
+		username = findSonatypeUsername()
+		password = findSonatypePassword()
 	}
 }
 
@@ -149,9 +157,18 @@ tasks.withType(GenerateModuleMetadata).configureEach {
 	enabled = false
 }
 
-tasks.named('wrapper') { task ->
-	// 国内镜像两个比较好的选择
-	// (1) 腾讯云: https://mirrors.cloud.tencent.com/gradle/gradle-$gradleVersion-bin.zip
-	// (2) 华为云: https://mirrors.huaweicloud.com/gradle/gradle-$gradleVersion-bin.zip
-	distributionUrl = "https://mirrors.cloud.tencent.com/gradle/gradle-$gradleVersion-bin.zip"
+private String findSonatypeUsername() {
+	try {
+		return getProperty('sonatypeUsername')
+	} catch (MissingPropertyException ignored) {
+		return System.getenv('SONATYPE_USERNAME')
+	}
+}
+
+private String findSonatypePassword() {
+	try {
+		return getProperty('sonatypePassword')
+	} catch (MissingPropertyException ignored) {
+		return System.getenv('SONATYPE_PASSWORD')
+	}
 }
