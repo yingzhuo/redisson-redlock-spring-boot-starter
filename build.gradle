@@ -1,22 +1,18 @@
 plugins {
-	id 'java'
-	id 'signing'
-	id 'maven-publish'
-	id 'io.spring.dependency-management'
-	id 'io.gitee.pkmer.pkmerboot-central-publisher'
+	id 'buildlogic.java-conventions'
+	id 'buildlogic.check-conventions'
+	id 'buildlogic.maven-central-jar-conventions'
+	id 'buildlogic.sonatype-conventions'
+	id 'buildlogic.root-project-conventions'
 }
 
-group = 'com.github.yingzhuo'
-version = '3.45.1-1'
-
-dependencyManagement {
-	imports {
-		mavenBom("org.springframework.boot:spring-boot-dependencies:$springBootVersion") {
-		}
-	}
+allprojects {
+	group = 'com.github.yingzhuo'
+	version = '3.45.1-1'
 }
 
 dependencies {
+
 	// spring-boot & spring
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	compileOnly 'org.springframework.boot:spring-boot-autoconfigure'
@@ -40,135 +36,4 @@ dependencies {
 
 	// slf4j
 	implementation 'org.slf4j:slf4j-api'
-}
-
-java {
-	withSourcesJar()
-	withJavadocJar()
-
-	sourceCompatibility = JavaVersion.toVersion("$javaVersion")
-	targetCompatibility = JavaVersion.toVersion("$javaVersion")
-
-	toolchain {
-		languageVersion = JavaLanguageVersion.of("$javaVersion")
-	}
-}
-
-sourcesJar {
-}
-
-jar {
-	manifest {
-		attributes([
-			'Module-Name'           : "${project.name}",
-			'Implementation-Version': "${project.version}",
-		])
-	}
-}
-
-javadoc {
-	options.addBooleanOption("html5", true)
-	options.addBooleanOption("Xdoclint:none", true)
-}
-
-test {
-	useJUnitPlatform()
-}
-
-tasks.named('wrapper') { task ->
-	// 国内镜像两个比较好的选择
-	// (1) 腾讯云: https://mirrors.cloud.tencent.com/gradle/gradle-$gradleVersion-bin.zip
-	// (2) 华为云: https://mirrors.huaweicloud.com/gradle/gradle-$gradleVersion-bin.zip
-	distributionUrl = "https://mirrors.cloud.tencent.com/gradle/gradle-$gradleVersion-bin.zip"
-}
-
-publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			from components.java
-
-			groupId = "${project.group}"
-			artifactId = 'redisson-redlock-spring-boot-starter'
-			version = "${project.version}"
-
-			versionMapping {
-				usage('java-api') {
-					fromResolutionOf('runtimeClasspath')
-				}
-				usage('java-runtime') {
-					fromResolutionResult()
-				}
-			}
-
-			pom {
-				name = 'redisson-redlock-spring-boot-starter'
-				description = 'spring-boot starter for redisson RedLock/MultiLock'
-				url = 'https://github.com/yingzhuo/redisson-redlock-spring-boot-starter'
-				inceptionYear = '2025'
-
-				licenses {
-					license {
-						name = 'Apache License, Version 2.0'
-						url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
-					}
-				}
-
-				developers {
-					developer {
-						id = 'yingzhuo'
-						name = '应卓'
-						email = 'yingzhor@gmail.com'
-						roles = ['author']
-						url = 'https://github.com/yingzhuo'
-					}
-				}
-
-				scm {
-					url = 'git@github.com:yingzhuo/redisson-redlock-spring-boot-starter.git'
-					connection = 'scm:git:git@github.com:yingzhuo/redisson-redlock-spring-boot-starter.git'
-					developerConnection = 'scm:git:git@github.com:yingzhuo/redisson-redlock-spring-boot-starter.git'
-				}
-			}
-		}
-	}
-
-	repositories {
-		maven {
-			name = "Local"
-			url = layout.buildDirectory.dir('repos/bundles')
-		}
-	}
-}
-
-signing {
-	useGpgCmd()
-	sign publishing.publications.mavenJava
-}
-
-pkmerBoot {
-	sonatypeMavenCentral {
-		stagingRepository = layout.buildDirectory.dir("repos/bundles")
-		username = findSonatypeUsername()
-		password = findSonatypePassword()
-	}
-}
-
-tasks.withType(GenerateModuleMetadata).configureEach {
-	enabled = false
-}
-
-private String findSonatypeUsername() {
-	try {
-		return getProperty('sonatypeUsername')
-	} catch (MissingPropertyException ignored) {
-		return System.getenv('SONATYPE_USERNAME')
-	}
-}
-
-private String findSonatypePassword() {
-	try {
-		return getProperty('sonatypePassword')
-	} catch (MissingPropertyException ignored) {
-		return System.getenv('SONATYPE_PASSWORD')
-	}
 }

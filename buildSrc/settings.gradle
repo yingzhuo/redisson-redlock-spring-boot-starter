@@ -1,8 +1,8 @@
 pluginManagement {
 	repositories {
 		mavenLocal()
-
-		file('buildSrc/config/maven/repositories.txt')
+		gradlePluginPortal()
+		file('config/maven/repositories.txt')
 			.readLines()
 			.forEach { line ->
 				line = line.trim()
@@ -17,22 +17,20 @@ pluginManagement {
 					}
 				}
 			}
-
-		gradlePluginPortal()
 		mavenCentral()
+		google()
 	}
-}
-
-plugins {
-	id 'io.spring.dependency-management' version "$dependencyManagementPluginVersion" apply false
-	id 'io.gitee.pkmer.pkmerboot-central-publisher' version "$mavenCentralPublisherPluginVersion" apply false
 }
 
 dependencyResolutionManagement {
+	versionCatalogs {
+		create('libs', { from(files('../gradle/libs.versions.toml')) })
+	}
+
 	repositories {
 		mavenLocal()
-
-		file('buildSrc/config/maven/repositories.txt')
+		gradlePluginPortal()
+		file('config/maven/repositories.txt')
 			.readLines()
 			.forEach { line ->
 				line = line.trim()
@@ -47,9 +45,9 @@ dependencyResolutionManagement {
 					}
 				}
 			}
-
 		mavenCentral()
+		google()
 	}
-}
 
-rootProject.name = 'redisson-redlock-spring-boot-starter'
+	repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
+}

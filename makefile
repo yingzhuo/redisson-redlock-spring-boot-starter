@@ -1,34 +1,56 @@
 usage:
-	@echo "=============================================================="
-	@echo "usage                 =>  显示菜单"
-	@echo "setup-gradle-wrapper  =>  初始化GradleWrapper"
-	@echo "compile               =>  编译"
-	@echo "clean                 =>  清理"
-	@echo "publish               =>  发布"
-	@echo "install               =>  本地安装"
-	@echo "push-all-codes        =>  提交源代码"
-	@echo "=============================================================="
+	@echo '==============================================================================================================='
+	@echo 'usage                : 显示本菜单'
+	@echo 'clean                : 清理项目构建产物'
+	@echo 'clean-buildsrc       : 清理项目构建逻辑'
+	@echo 'compile              : 编译项目'
+	@echo 'install              : 安装到本地maven仓库'
+	@echo 'publish              : 发布代码到maven中央仓库'
+	@echo 'setup-gradle-wrapper : 初始化 gradle wrapper'
+	@echo 'remove-wrapper       : 移除 gradle wrapper'
+	@echo 'add-license-header   : 为源文件添加许可证头'
+	@echo 'test                 : 执行单元测试'
+	@echo 'check                : 检查代码风格'
+	@echo 'push-all-codes       : 提交文件'
+	@echo '==============================================================================================================='
 
 clean:
 	gradlew -q "clean"
 
-setup-gradle-wrapper:
-	gradle "wrapper"
+clean-buildsrc:
+	gradlew -q -p $(CURDIR)/buildSrc/ "clean"
 
 compile:
 	gradlew "classes"
 
-install:
-	gradlew -x "test" -x "check" "publishToMavenLocal"
+install: add-license-header
+	gradlew --no-parallel -x "test" -x "check" "publishToMavenLocal"
 
 publish: install
-	gradlew -x "test" -x "check" "publishToMavenCentralPortal"
+	gradlew --no-parallel -x "test" -x "check" "publishToMavenCentralPortal"
 
-push-all-codes: clean
-	git status
-	git add .
-	git commit -m "$(shell /bin/date "+%F %T")"
-	git push github
-	git push gitee
+setup-gradle-wrapper:
+	gradle "wrapper"
 
-.PHONY: usage setup-gradle-wrapper compile publish install clean push-all-codes
+remove-wrapper:
+	gradle "removeWrapper"
+
+add-license-header:
+	gradlew -q "addLicenseHeader"
+
+test:
+	gradlew "test"
+
+check:
+	gradlew "check"
+
+push-all-codes: add-license-header
+	gradlew -q "pushAllCodes"
+
+.PHONY: \
+	usage \
+	clean clean-buildsrc compile publish install \
+	check test \
+	setup-gradle-wrapper remove-wrapper \
+	add-license-header \
+	push-all-codes

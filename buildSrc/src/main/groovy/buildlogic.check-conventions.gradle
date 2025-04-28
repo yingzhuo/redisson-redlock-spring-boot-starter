@@ -1,0 +1,16 @@
+plugins {
+	id 'checkstyle'
+}
+
+checkstyle {
+	configFile = file("${rootDir}/buildSrc/config/checkstyle/yingzhuo.xml")
+}
+
+checkstyleMain {
+	source = 'src/main/java'
+}
+
+checkstyleTest {
+	enabled = false
+	// source ='src/test/java'
+}

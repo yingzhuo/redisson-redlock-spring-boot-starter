@@ -1,0 +1,78 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+plugins {
+	id 'java'
+	id 'java-library'
+	id 'io.spring.dependency-management'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
+	}
+}
+
+java {
+	withSourcesJar()
+	withJavadocJar()
+
+	sourceCompatibility = JavaVersion.toVersion(javaVersion)
+	targetCompatibility = JavaVersion.toVersion(javaVersion)
+
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(javaVersion)
+	}
+}
+
+compileJava {
+	options.compilerArgs += [
+		'-parameters',
+		'-Xlint:unchecked',
+		'-Xlint:cast',
+		'-Xlint:rawtypes',
+		'-Xlint:overloads',
+		'-Xlint:divzero',
+		'-Xlint:finally',
+		'-Xlint:static',
+		// '-Werror',
+	]
+}
+
+jar {
+	manifest {
+		final var attr = [
+			'Module-Name'           : project.name,
+			'Implementation-Version': project.version,
+			'Build-Jdk-Spec'        : javaVersion,
+			'Created-By'            : "Gradle ${gradle.gradleVersion}",
+		]
+		attributes(attr)
+	}
+}
+
+sourcesJar {
+}
+
+javadoc {
+	failOnError = false
+	options.addBooleanOption("html5", true)
+	options.addBooleanOption("Xdoclint:none", true)
+}
+
+processResources {
+	from(rootDir) {
+		include('LICENSE.txt', 'NOTICE.txt')
+		into 'META-INF'
+	}
+
+	filter(ReplaceTokens, 'tokens': [
+		'PROJECT_GROUP'  : project.group,
+		'PROJECT_NAME'   : project.name,
+		'PROJECT_VERSION': project.version,
+	])
+	filteringCharset = 'UTF-8'
+}
+
+test {
+	useJUnitPlatform()
+}
