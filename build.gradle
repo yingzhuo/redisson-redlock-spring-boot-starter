@@ -16,7 +16,7 @@ ext {
 
 allprojects {
 	group = 'com.github.yingzhuo'
-	version = "$thisProjectVersion"
+	version = thisProjectVersion
 
 	configurations.configureEach {
 		resolutionStrategy.cacheChangingModulesFor 0, 'minutes'
