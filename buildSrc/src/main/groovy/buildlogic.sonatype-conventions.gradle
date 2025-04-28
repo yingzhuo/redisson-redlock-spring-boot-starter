@@ -12,11 +12,13 @@ pkmerBoot {
 
 tasks.named('publishToMavenCentralPortal') { task ->
 	doFirst {
-		if ("$springTurbochargerVersion".endsWith('SNAPSHOT')) {
+		if ("${project.version}".endsWith('SNAPSHOT')) {
 			throw new GradleException('Not able to publish SNAPSHOT items')
 		}
 	}
 }
+
+// ---------------------------------------------------------------------------------------------------------------------
 
 private String findSonatypeUsername() {
 	try {
