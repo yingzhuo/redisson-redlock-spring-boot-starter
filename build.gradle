@@ -14,13 +14,11 @@ ext {
 	// https://docs.spring.io/spring-boot/appendix/dependency-versions/properties.html
 }
 
-allprojects {
-	group = 'com.github.yingzhuo'
-	version = thisProjectVersion
+group = 'com.github.yingzhuo'
+version = thisProjectVersion
 
-	configurations.configureEach {
-		resolutionStrategy.cacheChangingModulesFor 0, 'minutes'
-	}
+configurations.configureEach {
+	resolutionStrategy.cacheChangingModulesFor 0, 'minutes'
 }
 
 dependencies {

@@ -10,7 +10,7 @@ publishing {
 
 			groupId = 'com.github.yingzhuo'
 			artifactId = 'redisson-redlock-spring-boot-starter'
-			version = "${project.version}"
+			version = "${thisProjectVersion}"
 
 			versionMapping {
 				usage('java-api') {
