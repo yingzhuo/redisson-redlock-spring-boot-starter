@@ -19,7 +19,7 @@ import org.gradle.api.Project
 
 import java.time.LocalDateTime
 
-abstract class SharedFunctions {
+class SharedFunctions {
 
 	static String getTimestamp(String formatPattern = 'yyyyMMddHHmmss') {
 		return LocalDateTime.now().format(formatPattern)

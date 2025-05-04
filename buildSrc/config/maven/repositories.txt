@@ -1,7 +1,0 @@
-https://maven.aliyun.com/repository/public/
-https://mirrors.cloud.tencent.com/nexus/repository/maven-public/
-https://repo.huaweicloud.com/repository/maven/
-https://mirrors.163.com/maven/repository/maven-public/
-https://repo.spring.io/release
-https://repo.spring.io/milestone
-https://repo.spring.io/snapshot

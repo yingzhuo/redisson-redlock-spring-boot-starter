@@ -1,3 +1,5 @@
+import io.gitee.pkmer.enums.PublishingType
+
 plugins {
 	id 'io.gitee.pkmer.pkmerboot-central-publisher'
 }
@@ -7,6 +9,7 @@ pkmerBoot {
 		stagingRepository = layout.buildDirectory.dir("repos/bundles")
 		username = findSonatypeUsername()
 		password = findSonatypePassword()
+		publishingType = PublishingType.AUTOMATIC
 	}
 }
 
@@ -17,8 +20,6 @@ tasks.named('publishToMavenCentralPortal') { task ->
 		}
 	}
 }
-
-// ---------------------------------------------------------------------------------------------------------------------
 
 private String findSonatypeUsername() {
 	try {

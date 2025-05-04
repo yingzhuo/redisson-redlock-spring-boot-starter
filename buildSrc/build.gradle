@@ -2,19 +2,16 @@ plugins {
 	id 'groovy-gradle-plugin'
 }
 
-try (var inputStream = file("${rootDir}/../gradle.properties").newInputStream()) {
-	var properties = new Properties()
-	properties.load(inputStream)
-	properties.forEach(ext::set)
-}
-
-try (var inputStream = file('gradle.properties').newInputStream()) {
-	var properties = new Properties()
-	properties.load(inputStream)
-	properties.forEach(ext::set)
+['../gradle.properties', 'gradle.properties'].each {
+	try (var reader = file(it).newReader('ISO-8859-1')) {
+		final var props = new Properties()
+		props.load(reader)
+		props.forEach(ext::set)
+	}
 }
 
 dependencies {
+	implementation "io.gitee.pkmer.pkmerboot-central-publisher:io.gitee.pkmer.pkmerboot-central-publisher.gradle.plugin:$mavenCentralPublisherPluginVersion"
 }
 
 gradlePlugin {

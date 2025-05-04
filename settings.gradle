@@ -1,26 +1,5 @@
 pluginManagement {
-	repositories {
-		mavenLocal()
-
-		file('buildSrc/config/maven/repositories.txt')
-			.readLines()
-			.forEach { line ->
-				line = line.trim()
-				if (!line.isBlank() && !line.startsWith('#')) {
-					maven {
-						url = uri(line)
-						allowInsecureProtocol = true
-						content {
-							excludeGroup 'com.github.yingzhuo'
-							excludeGroup 'io.github.yingzhuo'
-						}
-					}
-				}
-			}
-
-		gradlePluginPortal()
-		mavenCentral()
-	}
+	evaluate(file('buildSrc/config/maven/RepositoriesSupport.groovy')).applyPluginManagement(this)
 }
 
 plugins {
@@ -29,27 +8,7 @@ plugins {
 }
 
 dependencyResolutionManagement {
-	repositories {
-		mavenLocal()
-
-		file('buildSrc/config/maven/repositories.txt')
-			.readLines()
-			.forEach { line ->
-				line = line.trim()
-				if (!line.isBlank() && !line.startsWith('#')) {
-					maven {
-						url = uri(line)
-						allowInsecureProtocol = true
-						content {
-							excludeGroup 'com.github.yingzhuo'
-							excludeGroup 'io.github.yingzhuo'
-						}
-					}
-				}
-			}
-
-		mavenCentral()
-	}
+	evaluate(file('buildSrc/config/maven/RepositoriesSupport.groovy')).applyDependencyResolutionManagement(this)
 }
 
 rootProject.name = 'redisson-redlock-spring-boot-starter'

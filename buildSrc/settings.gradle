@@ -1,25 +1,5 @@
 pluginManagement {
-	repositories {
-		mavenLocal()
-		gradlePluginPortal()
-		file('config/maven/repositories.txt')
-			.readLines()
-			.forEach { line ->
-				line = line.trim()
-				if (!line.isBlank() && !line.startsWith('#')) {
-					maven {
-						url = uri(line)
-						allowInsecureProtocol = true
-						content {
-							excludeGroup 'com.github.yingzhuo'
-							excludeGroup 'io.github.yingzhuo'
-						}
-					}
-				}
-			}
-		mavenCentral()
-		google()
-	}
+	evaluate(file('config/maven/RepositoriesSupport.groovy')).applyPluginManagement(this)
 }
 
 dependencyResolutionManagement {
@@ -27,27 +7,7 @@ dependencyResolutionManagement {
 		create('libs', { from(files('../gradle/libs.versions.toml')) })
 	}
 
-	repositories {
-		mavenLocal()
-		gradlePluginPortal()
-		file('config/maven/repositories.txt')
-			.readLines()
-			.forEach { line ->
-				line = line.trim()
-				if (!line.isBlank() && !line.startsWith('#')) {
-					maven {
-						url = uri(line)
-						allowInsecureProtocol = true
-						content {
-							excludeGroup 'com.github.yingzhuo'
-							excludeGroup 'io.github.yingzhuo'
-						}
-					}
-				}
-			}
-		mavenCentral()
-		google()
-	}
+	evaluate(file('config/maven/RepositoriesSupport.groovy')).applyDependencyResolutionManagement(this)
 
 	repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
 }
