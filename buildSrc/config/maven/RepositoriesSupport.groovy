@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-def applyDependencyResolutionManagement(settings) {
+def apply(settings) {
 	settings.dependencyResolutionManagement.repositories {
 		mavenLocal()
 		maven { url = 'https://maven.aliyun.com/repository/public/' }
@@ -25,14 +25,6 @@ def applyDependencyResolutionManagement(settings) {
 		maven { url = 'https://repo.spring.io/milestone' }
 		maven { url = 'https://repo.spring.io/snapshot' }
 		google()
-	}
-}
-
-def applyPluginManagement(settings) {
-	settings.pluginManagement.repositories {
-		mavenLocal()
-		gradlePluginPortal()
-		mavenCentral()
 	}
 }
 

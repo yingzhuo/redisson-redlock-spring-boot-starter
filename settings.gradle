@@ -1,5 +1,9 @@
 pluginManagement {
-	evaluate(file('buildSrc/config/maven/RepositoriesSupport.groovy')).applyPluginManagement(this)
+	repositories {
+		mavenLocal()
+		gradlePluginPortal()
+		mavenCentral()
+	}
 }
 
 plugins {
@@ -8,7 +12,7 @@ plugins {
 }
 
 dependencyResolutionManagement {
-	evaluate(file('buildSrc/config/maven/RepositoriesSupport.groovy')).applyDependencyResolutionManagement(this)
+	evaluate(file('buildSrc/config/maven/RepositoriesSupport.groovy')).apply(this)
 }
 
 rootProject.name = 'redisson-redlock-spring-boot-starter'

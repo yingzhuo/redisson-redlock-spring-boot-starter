@@ -11,7 +11,7 @@ usage:
 	@echo 'add-license-header   : 为源文件添加许可证头'
 	@echo 'test                 : 执行单元测试'
 	@echo 'check                : 检查代码风格'
-	@echo 'push-all-codes       : 提交文件'
+	@echo 'push-to-vcs          : 提交文件'
 	@echo '==============================================================================================================='
 
 clean:
@@ -44,8 +44,8 @@ test:
 check:
 	gradlew "check"
 
-push-all-codes: add-license-header
-	gradlew -q "pushAllCodes"
+push-to-vcs: add-license-header
+	gradlew -q "pushToVcs"
 
 .PHONY: \
 	usage \
@@ -53,4 +53,4 @@ push-all-codes: add-license-header
 	check test \
 	setup-gradle-wrapper remove-wrapper \
 	add-license-header \
-	push-all-codes
+	push-to-vcs

@@ -22,12 +22,12 @@ tasks.register('removeWrapper', Delete) { task ->
 	}
 }
 
-tasks.register('pushAllCodes', Exec) { task ->
-	group = 'git'
-	description = 'Commit and push codes to gitee/github'
+tasks.register('pushToVcs', Exec) { task ->
+	group = 'vcs'
+	description = 'Commit and push codes to vcs.'
 
 	workingDir(rootDir)
-	commandLine('bash', "$rootDir/buildSrc/config/shell/push.sh")
+	commandLine('bash', "$rootDir/buildSrc/config/vcs/push.sh")
 }
 
 addLicenseHeader {
