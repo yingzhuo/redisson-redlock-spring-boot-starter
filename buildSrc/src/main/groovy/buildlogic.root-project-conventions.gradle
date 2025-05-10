@@ -10,18 +10,6 @@ tasks.named('wrapper') { task ->
 	distributionUrl = "https://mirrors.cloud.tencent.com/gradle/gradle-$gradleWrapperVersion-bin.zip"
 }
 
-tasks.register('removeWrapper', Delete) { task ->
-	group = 'build setup'
-	description = 'Remove Gradle wrapper files.'
-
-	followSymlinks = true
-	delete fileTree(rootDir) {
-		include 'gradlew'
-		include 'gradlew.bat'
-		include 'gradle/wrapper/'
-	}
-}
-
 tasks.register('pushToVcs', Exec) { task ->
 	group = 'vcs'
 	description = 'Commit and push codes to vcs.'
