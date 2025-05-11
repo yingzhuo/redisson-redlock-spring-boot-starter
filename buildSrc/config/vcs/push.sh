@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
+# 添加所有文件
+git add .
+
 # 检查是否有未提交的更改
 if git diff --quiet && git diff --staged --quiet; then
     echo "[INFO] 没有检测到更改"
@@ -9,7 +12,6 @@ if git diff --quiet && git diff --staged --quiet; then
 fi
 
 # 暂存所有更改并提交
-git add .
 TIMESTAMP=$(date "+%F %T")
 git commit -m "$TIMESTAMP"
 
