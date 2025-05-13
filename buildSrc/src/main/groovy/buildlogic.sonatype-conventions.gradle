@@ -7,8 +7,8 @@ plugins {
 pkmerBoot {
 	sonatypeMavenCentral {
 		stagingRepository = layout.buildDirectory.dir("repos/bundles")
-		username = findSonatypeUsername()
-		password = findSonatypePassword()
+		username = providers.gradleProperty('sonatypeUsername').getOrElse(System.getenv('SONATYPE_USERNAME'))
+		password = providers.gradleProperty('sonatypePassword').getOrElse(System.getenv('SONATYPE_PASSWORD'))
 		publishingType = PublishingType.AUTOMATIC
 	}
 }
@@ -18,21 +18,5 @@ tasks.named('publishToMavenCentralPortal') { task ->
 		if ("${project.version}".endsWith('SNAPSHOT')) {
 			throw new GradleException('Not able to publish SNAPSHOT items')
 		}
-	}
-}
-
-private String findSonatypeUsername() {
-	try {
-		return getProperty('sonatypeUsername')
-	} catch (MissingPropertyException ignored) {
-		return System.getenv('SONATYPE_USERNAME')
-	}
-}
-
-private String findSonatypePassword() {
-	try {
-		return getProperty('sonatypePassword')
-	} catch (MissingPropertyException ignored) {
-		return System.getenv('SONATYPE_PASSWORD')
 	}
 }
