@@ -18,7 +18,10 @@ group = 'com.github.yingzhuo'
 version = thisProjectVersion
 
 configurations.configureEach {
-	resolutionStrategy.cacheChangingModulesFor 0, 'minutes'
+	resolutionStrategy {
+		cacheChangingModulesFor(0, 'minutes')
+		cacheDynamicVersionsFor(0, 'minutes')
+	}
 }
 
 dependencies {
