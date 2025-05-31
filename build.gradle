@@ -19,8 +19,8 @@ version = thisProjectVersion
 
 configurations.configureEach {
 	resolutionStrategy {
-		cacheChangingModulesFor(0, 'minutes')
-		cacheDynamicVersionsFor(0, 'minutes')
+		cacheChangingModulesFor 0, 'minutes'
+		cacheDynamicVersionsFor 0, 'minutes'
 	}
 }
 
@@ -41,7 +41,7 @@ dependencies {
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
 	// redisson
-	implementation 'org.redisson:redisson:3.47.0'
+	implementation 'org.redisson:redisson:3.48.0'
 
 	// lombok
 	compileOnly 'org.projectlombok:lombok'
