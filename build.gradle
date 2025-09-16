@@ -19,8 +19,8 @@ version = thisProjectVersion
 
 configurations.configureEach {
 	resolutionStrategy {
-		cacheChangingModulesFor 0, 'minutes'
-		cacheDynamicVersionsFor 0, 'minutes'
+		cacheChangingModulesFor(24, 'hours')
+		cacheDynamicVersionsFor(24, 'hours')
 	}
 }
 
